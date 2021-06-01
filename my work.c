@@ -3,8 +3,8 @@
 
 void port_Init (void) {                  // this function is to activate the ports which will be used inshaa allah
 SYSCTL_RCGCGPIO_R = 0x20 ;               // to activate port F bs mtl3 error w na l sra7a 3wz anam
-	while ((SYSCTL_PRGPIO_R & 0x20)==0){}  // waiting for the activation 
- 
+while ((SYSCTL_PRGPIO_R & 0x20)==0){}    // waiting for the activation 
+GPIO_PORTF_LOCK_R = 0x4C4F434B ;         // UNLOCKING PORT F 
 }
 
 
