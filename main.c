@@ -11,6 +11,7 @@ int main()
     printf("if you want to calculate subtraction enter 2 \n ");
     printf("if you want to calculate multiblication enter 3 \n ");
     printf("if you want to calculate division enter 4 \n");
+    printf("if you want to make all operations enter 5");
 
     scanf("%d", &x);
 
@@ -29,6 +30,16 @@ int main()
     case 4:
         printf(" the division of two numbers equal to %f \n", num1 / num2);
         break;
+
+    case 5:
+
+        printf(" the sumation of two numbers equal to %f \n", num1 + num2);
+        printf(" the subtraction of two numbers equal to %f \n", num1 - num2);
+        printf(" the multiplication of two numbers equal to %f \n", num1 * num2);
+        printf(" the division of two numbers equal to %f \n", num1 / num2);
+
+        break;
+
     default:
         printf("please enter the right number \n");
     }
