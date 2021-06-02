@@ -1,26 +1,29 @@
 #include <stdio.h>
 #include <tm4c123gh6pm.h>
+#define RED_LED  0x02
+#define BLUE_LED 0x04
 void SystemInit () {} ;
 
-void port_Init (void) {                     // this function is to activate the ports which will be used inshaa allah
+void port_Init (void) {                    	 // this function is to activate the ports which will be used inshaa allah
 	SYSCTL_RCGCGPIO_R = 0x20 ;                // to activate port F 
 	while ((SYSCTL_PRGPIO_R & 0x20)==0){}     // waiting for the activation 
 	GPIO_PORTF_LOCK_R = 0x4C4F434B ;          // UNLOCKING PORT F 
 }
 // ##################################################################################################################################
-void LED_Init (void) {                    	// this function is to unlock the pins and enable thhem as digital output
-	GPIO_PORTF_DATA_R   = 0x02 ;                 // on 
-	GPIO_PORTF_PUR_R		= 0x02 ;                 // use pull up resistance
-	GPIO_PORTF_CR_R  		= 0x02 ;                 // unlock pin F1 (the red led )
-	GPIO_PORTF_DIR_R 		= 0x02 ;                 // pin F1 as output
-	GPIO_PORTF_DEN_R 		= 0x02 ;                 // to enable digital
-	GPIO_PORTF_AFSEL_R 	= ~(0x02);               // disable Alternate function select 
-	GPIO_PORTF_AMSEL_R 	= ~(0x02);               // disable Analog
-	GPIO_PORTF_PCTL_R 	= 0x00000000; 					 // regular digital function	
+void  LED_Init (char data) {                   		    	  // this function is to turn on Led using char for 8 bits
+	GPIO_PORTF_DATA_R   		&= data ;                 // on 
+	GPIO_PORTF_PUR_R		|= data ;                 // use pull up resistance
+	GPIO_PORTF_CR_R  		|= data ;                 // unlock pin F1 (the red led )
+	GPIO_PORTF_DIR_R 		|= data ;                 // pin F1 as output
+	GPIO_PORTF_DEN_R 		|= data ;                 // to enable digital
+	GPIO_PORTF_AFSEL_R 		&= ~(data);               // disable Alternate function select 
+	GPIO_PORTF_AMSEL_R 		&= ~(data);               // disable Analog
+	GPIO_PORTF_PCTL_R 		&= 0x00000000;            // disable special functions
 }
 // ####################################################################################################################################
 int main() {
-	
+	port_Init();
+	LED_Init (RED_LED);
 }
 
 
