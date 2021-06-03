@@ -11,7 +11,7 @@ void port_Init (void) {                    	 // this function is to activate the
 }
 // ##################################################################################################################################
 void  LED_Init (char data) {                   		    	  // this function is to turn on Led using char for 8 bits
-	GPIO_PORTF_DATA_R   		&= data ;                 // on  ####### bs fy mo4kla hna fl debug l value bta3 l register dh byb2a 8lt
+	GPIO_PORTF_DATA_R   		|= data ;                 // on  
 	GPIO_PORTF_PUR_R		|= data ;                 // use pull up resistance
 	GPIO_PORTF_CR_R  		|= data ;                 // unlock pin F1 (the red led )
 	GPIO_PORTF_DIR_R 		|= data ;                 // pin F1 as output
