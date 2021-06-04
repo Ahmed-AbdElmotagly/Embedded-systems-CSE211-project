@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <tm4c123gh6pm.h>
+#include <stdlib.h>
 #define RED_LED  0x02
 #define BLUE_LED 0x04
 void SystemInit () {} ;
@@ -23,8 +24,8 @@ void  LED_Init (char data) {                   		    	  // this function is to t
 // ####################################################################################################################################
 int main() {
 	port_Init();
-	LED_Init (RED_LED);                                       // ###### mmkn n3ml if(distance = 100){LED_Init(RED_LED)} bs lma n3rf ngyb l distance l awl
-								// m7tagyn function n7sb byha l distance 
+	LED_Init (RED_LED);                                        
+	if(distance = 100){LED_Init(RED_LED)} 							
 }
 
 
