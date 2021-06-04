@@ -67,16 +67,36 @@ double distance(double lat1, double longt1, double lat2, double longt2)
     }
 	 // from formoula sheet "Haversine formula" to calculate the distance from here
 	
+    else
+	{
+
+		// from formoula sheet "HaverSine" to calculate the distance
+		// declare some of parameters
+		angleOfLat = (lat2 - lat1) / 2;
+		angleOfLongt = (longt2 - longt1) / 2;
+
+		dist = (2 * R * asin(sqrt((sin(deg_to_rad(angleOfLat)) * sin(deg_to_rad(angleOfLat))) + (cos(deg_to_rad(longt1)) * cos(deg_to_rad(longt2)) * sin(deg_to_rad(angleOfLongt)) * sin(deg_to_rad(angleOfLongt))))));
+
+		return dist;
+	}
+}
+
 	
 	
 	
  
 int main() {
 	port_Init();
-	LED_Init (RED_LED);                                        
-	if(distance = 100){LED_Init(RED_LED)} 
-	printf("the distance %f", distance(lat1, longt1, lat2, longt2)); //tset the distance
-}
+	
+	// Example for testing function
+	
+	double lat1 = 30.0003, lat2 = 29.999, longt1 = 31.1768, longt2 = 31.1736;
+	double dist = distance(lat1, longt1, lat2, longt2);
+
+	printf("the distance %f", dist); //tset the distance
+	LED_Init(RED_LED);
+	if (dist > 100)
+	LED_Init(RED_LED);
 
 
 /*#define GPIO_PORTF_DATA_R         (*((volatile unsigned long*)0x400253FC))
