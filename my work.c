@@ -35,6 +35,16 @@ void  LED_Init (char data) {                   		    	  // this function is to t
 	GPIO_PORTF_PCTL_R 		&= 0x00000000;            // disable special functions
 }
 // ####################################################################################################################################
+void	LCD_DATA (char DUAL){				// this function for the data to be placed on  pins of port B to connect the LCD
+	GPIO_PORTB_DATA_R   		|= DUAL ;       // connect the pins of the lcd to port B pins in the sequence PB0 to D0 ..
+	GPIO_PORTB_DIR_R 		|= ALL ;	// the 8 pins of port B as OUTPUT
+	GPIO_PORTB_DEN_R 		|= ALL ;        // to enable digital
+	GPIO_PORTB_CR_R  		|= ALL ;        // unlock ALL pins of port B to be available for the LCD 
+	GPIO_PORTB_AMSEL_R 	&= 0x00000000;            // disable Analog
+	GPIO_PORTB_PCTL_R 	&= 0x00000000;            // disable special functions
+	GPIO_PORTB_AFSEL_R 	&= 0x00000000;            // disable Alternate function select
+	}
+//#######################################################################################################################################
 
 /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::/
 /:                       Function prototypes                        :/
