@@ -1,8 +1,13 @@
 #include <stdio.h>
 #include <tm4c123gh6pm.h>
 #include <stdlib.h>
+#include <math.h>
+
 #define RED_LED  0x02
 #define BLUE_LED 0x04
+#define pi 3.14159265358979323846
+#define R 6371000 // raduis of Earth
+
 void SystemInit () {} ;
 
 void port_Init (void) {                    	 // this function is to activate the ports which will be used inshaa allah
@@ -22,10 +27,37 @@ void  LED_Init (char data) {                   		    	  // this function is to t
 	GPIO_PORTF_PCTL_R 		&= 0x00000000;            // disable special functions
 }
 // ####################################################################################################################################
+
+/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::/
+/:                       Function prototypes                        :/
+/:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+double deg_to_rad(double deg)
+{
+    return deg * (pi / 180);
+}
+double rad_to_deg(double rad)
+{
+    return rad * (180 / pi);
+}
+
+double distance(double lat1, double longt1, double lat2, double longt2)
+{
+    double dist, angleOfLat, angleOfLongt;
+    if ((lat1 == lat2) && (longt1 == longt2))
+    {
+        return 0;
+    }
+	 // from formoula sheet "Haversine formula" to calculate the distance from here
+	
+	
+	
+	
+ 
 int main() {
 	port_Init();
 	LED_Init (RED_LED);                                        
-	if(distance = 100){LED_Init(RED_LED)} 							
+	if(distance = 100){LED_Init(RED_LED)} 
+	printf("the distance %f", distance(lat1, longt1, lat2, longt2)); //tset the distance
 }
 
 
