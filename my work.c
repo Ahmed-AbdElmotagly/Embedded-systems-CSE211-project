@@ -45,7 +45,17 @@ void	LCD_DATA (char DUAL){				// this function for the data to be placed on  pin
 	GPIO_PORTB_AFSEL_R 	&= 0x00000000;            // disable Alternate function select
 	}
 //#######################################################################################################################################
-
+void LCD_SETUP (char DUAL){				// this function is to setup write and data configuration with port E
+	// CONNECT RS of LCD to PE3 ,, CONNECT R/W to PE1 ,, CONNECT ENABLE to PE2
+	GPIO_PORTE_CR_R  	|= LCD_SPECIAL ;          // unlock pin E0 
+	GPIO_PORTE_DIR_R 	|= LCD_SPECIAL ;          // pin E0 as output
+	GPIO_PORTE_DEN_R 	|= LCD_SPECIAL ;          // to enable digital
+	GPIO_PORTE_AFSEL_R 	&= 0x00000000;               // disable Alternate function select 
+	GPIO_PORTE_AMSEL_R 	&= 0x00000000;               // disable Analog
+	GPIO_PORTE_PCTL_R 	&= 0x00000000;            // disable special functions
+	GPIO_PORTE_DATA_R   	|= DUAL ;                 //
+}
+//############################################################################################################################################
 /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::/
 /:                       Function prototypes                        :/
 /:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
