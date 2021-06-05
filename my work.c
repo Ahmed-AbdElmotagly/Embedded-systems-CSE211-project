@@ -96,7 +96,7 @@ double distance(double lat1, double longt1, double lat2, double longt2)
 	
  
 int main() {
-	port_Init();
+	
 	
 	// Example for testing function
 	
@@ -104,10 +104,10 @@ int main() {
 	double dist = distance(lat1, longt1, lat2, longt2);
 
 	printf("the distance %f", dist); //tset the distance
-	LED_Init(RED_LED);
 	if (dist > 100)
+	port_Init();
 	LED_Init(RED_LED);
-
+}
 
 /*#define GPIO_PORTF_DATA_R         (*((volatile unsigned long*)0x400253FC))
 #define GPIO_PORTF_DIR_R          (*((volatile unsigned long*)0x40025400))
@@ -120,4 +120,5 @@ int main() {
 #define GPIO_PORTF_LOCK_R         (*((volatile unsigned long*)0x40025520))
 #define SYSCTL_RCGCGPIO_R         (*((volatile unsigned long*)0x400FE608))
 #define SYSCTL_PRGPIO_R           (*((volatile unsigned long*)0x400FEA08)) */
+	
 
