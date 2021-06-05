@@ -104,9 +104,10 @@ int main() {
 	double dist = distance(lat1, longt1, lat2, longt2);
 
 	printf("the distance %f", dist); //tset the distance
-	if (dist > 100)
+	if (dist > 100){
 	port_Init();
 	LED_Init(RED_LED);
+	}
 }
 
 /*#define GPIO_PORTF_DATA_R         (*((volatile unsigned long*)0x400253FC))
