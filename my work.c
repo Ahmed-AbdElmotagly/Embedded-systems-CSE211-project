@@ -166,7 +166,15 @@ int main() {
 	if (dist > 100){
 	port_Init();
 	LED_Init(RED_LED);
+	LCD_Initalization();			// Initialize LCD 
+        LCD_Clear();
+        delayMs(500);
+	LCD_String("If distance>100 m ");	//write string on 1st line of LCD
+	LCD_Command(0xC0);		// Go to 2nd line
+	LCD_String(" Turn on RED  ");	// Write string on 2nd line
+        delayMs(500);
 	}
+	return 0 ;
 }
 
 
