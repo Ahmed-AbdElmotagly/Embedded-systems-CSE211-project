@@ -99,6 +99,29 @@ void LCD_Initalization (void)				// LCD Initialize function
   LCD_Command (0x01);		         // Clear display 
 	LCD_Command (0x80);		        // Cursor at home position 
 }
+	void LCD_String (char *str)		// Send string to LCD function 
+{
+	int i;
+	for(i=0;str[i]!=0;i++)		// Send each char of string till the NULL 
+	{
+		LCD_Data (str[i]);
+	}
+}
+
+void LCD_String_xy (char row, char pos, char *str)    // Send string to LCD with xy position 
+{
+	if (row == 0 && pos<16)
+	LCD_Command((pos & 0x0F)|0x80);	           // Command of first row and required position<16 
+	else if (row == 1 && pos<16)
+	LCD_Command((pos & 0x0F)|0xC0);	         // Command of second row and required position<16 
+	LCD_String(str);		                // Call LCD string function 
+}
+
+void LCD_Clear()
+{
+	LCD_Command (0x01);		// clear display 
+	LCD_Command (0x80);		// return cursor at home position 
+}
 /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::/
 /:                       Function prototypes                        :/
 /:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
@@ -146,7 +169,7 @@ int main() {
 	double lat1 = 30.0003, lat2 = 29.999, longt1 = 31.1768, longt2 = 31.1736;
 	double dist = distance(lat1, longt1, lat2, longt2);
 
-	printf("the distance %f", dist); //tset the distance
+	printf("the distance %f", dist); //test the distance
 	if (dist > 100){
 	port_Init();
 	LED_Init(RED_LED);
