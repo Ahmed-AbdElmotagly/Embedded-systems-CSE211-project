@@ -71,19 +71,20 @@ void LCD_Data (unsigned char char_data)	    // LCD data for writting function
 //############################################################################################################################################
 void LCD_Initalization (void)				// LCD Initialize function 
 {
-	SYSCTL_RCGCGPIO_R = 0x01 ;  	    // to activate port A  
-	SYSCTL_RCGCGPIO_R = 0x02 ;   	   // to activate port B 
-	GPIO_PORTA_DIR_R = 0xFF;		  	// To Make LCD command port A direction as output 
-	GPIO_PORTB_DIR_R = 0xFF;			 // To Make LCD Data port B direction as output 
-	GPIO_PORTA_DEN_R = 0xE0;			// To Make LCD command port A digital  
-	GPIO_PORTB_DEN_R = 0xFF;    // To Make LCD DATA port B digital  
-    
-    delayMs(20);			      // LCD Power ON delay always more than 15Ms
-	  LCD_Command(0x30);
-    delayMs(5);
-    LCD_Command(0x30);
-    delayUs(100);
-    
+	SYSCTL_RCGCGPIO_R |= 0x03 ;  	          // to activate port A & B
+	while ((SYSCTL_PRGPIO_R & 0x03)==0){} 
+	GPIO_PORTA_DIR_R |= 0xE0;		  	         // To Make LCD command port A direction as output 
+	GPIO_PORTA_DEN_R |= 0xE0;		             	// To Make LCD command port A digital 
+	GPIO_PORTA_AFSEL_R &= ~ 0XFF; 					 //Disable Analog mode on PORTA
+	GPIO_PORTA_AMSEL_R &= ~ 0XFF;  					 //Disable Analog mode on PORTA
+		
+	GPIO_PORTB_DIR_R |= 0xFF;			           // To Make LCD Data port B direction as output 
+	GPIO_PORTB_DEN_R |= 0xFF;                  // To Make LCD DATA port B digital  
+  GPIO_PORTB_AFSEL_R &= ~ 0XFF; 					 //Disable Analog mode on PORTB
+	GPIO_PORTB_AMSEL_R &= ~ 0XFF;  					 //Disable Analog mode on PORTB
+		
+    delayMs(20);			                       // LCD Power ON delay always more than 15Ms
+	 
   LCD_Command(0x30);
 	LCD_Command (0x38);		            // Initialization of 16X2 LCD in  8_bit mode 
 	LCD_Command (0x0C);		           // Display ON Cursor OFF 
