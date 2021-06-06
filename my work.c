@@ -56,25 +56,25 @@ void delayUs(int us){
     {} 
 }	
 
-void	LCD_DATA (char DUAL){				// this function for the data to be placed on  pins of port B to connect the LCD
-	GPIO_PORTB_DATA_R   		|= DUAL ;       // connect the pins of the lcd to port B pins in the sequence PB0 to D0 ..
-	GPIO_PORTB_DIR_R 		|= ALL ;	// the 8 pins of port B as OUTPUT
-	GPIO_PORTB_DEN_R 		|= ALL ;        // to enable digital
-	GPIO_PORTB_CR_R  		|= ALL ;        // unlock ALL pins of port B to be available for the LCD 
-	GPIO_PORTB_AMSEL_R 	&= 0x00000000;            // disable Analog
-	GPIO_PORTB_PCTL_R 	&= 0x00000000;            // disable special functions
-	GPIO_PORTB_AFSEL_R 	&= 0x00000000;            // disable Alternate function select
-	}
+void LCD_Command(unsigned char cmnd)
+{
+    GPIO_PORTB_DATA_R   |= cmnd ;
+    GPIO_PORTA_DATA_R   &= ~(0x20) ;    //  A5--> RS=0 command register.
+    GPIO_PORTA_DATA_R   &= ~(0x40) ;    //  A6--> RW=0 Write operation.
+    GPIO_PORTA_DATA_R   |= (0x80) ;     // A7  --> Enable pulse 
+   
+    if(cmnd<4)
+    delayMs(4);
+    else
+    delayUs(40);
 //#######################################################################################################################################
-void LCD_SETUP (char DUAL){				// this function is to setup write and data configuration with port E
-	// CONNECT RS of LCD to PE3 ,, CONNECT R/W to PE1 ,, CONNECT ENABLE to PE2
-	GPIO_PORTE_CR_R  	|= LCD_SPECIAL ;          // unlock pin E0 
-	GPIO_PORTE_DIR_R 	|= LCD_SPECIAL ;          // pin E0 as output
-	GPIO_PORTE_DEN_R 	|= LCD_SPECIAL ;          // to enable digital
-	GPIO_PORTE_AFSEL_R 	&= 0x00000000;               // disable Alternate function select 
-	GPIO_PORTE_AMSEL_R 	&= 0x00000000;               // disable Analog
-	GPIO_PORTE_PCTL_R 	&= 0x00000000;            // disable special functions
-	GPIO_PORTE_DATA_R   	|= DUAL ;                 //
+void LCD_Data (unsigned char char_data)	    // LCD data for writting function 
+{
+	GPIO_PORTB_DATA_R |= char_data;
+	GPIO_PORTA_DATA_R   |=(0x20) ;        //  A5--> RS=1 command register.
+    GPIO_PORTA_DATA_R   &= ~(0x40) ;     //  A6--> RW=0 Write operation.
+    GPIO_PORTA_DATA_R   |= (0x80) ;     // A7  --> Enable pulse 
+	delayUs(40);
 }
 //############################################################################################################################################
 /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::/
