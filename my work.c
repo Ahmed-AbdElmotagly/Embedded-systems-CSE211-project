@@ -5,14 +5,6 @@
 
 #define RED_LED  0x02
 #define BLUE_LED 0x04
-#define ALL 0xFF
-#define LCD_SPECIAL 0x01 // for the write and data configuration
-#define CLEAR 0x01 
-#define LINE1 0x80
-#define LINE2 0xC0
-#define CURSOR_STEP 0x06
-#define WAKEUP 0x30
-#define ENABLE 0x04
 #define pi 3.14159265358979323846
 #define R 6371000 // raduis of Earth
 
