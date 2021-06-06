@@ -77,6 +77,28 @@ void LCD_Data (unsigned char char_data)	    // LCD data for writting function
 	delayUs(40);
 }
 //############################################################################################################################################
+void LCD_Initalization (void)				// LCD Initialize function 
+{
+	SYSCTL_RCGCGPIO_R = 0x01 ;  	    // to activate port A  
+	SYSCTL_RCGCGPIO_R = 0x02 ;   	   // to activate port B 
+	GPIO_PORTA_DIR_R = 0xFF;		  	// To Make LCD command port A direction as output 
+	GPIO_PORTB_DIR_R = 0xFF;			 // To Make LCD Data port B direction as output 
+	GPIO_PORTA_DEN_R = 0xE0;			// To Make LCD command port A digital  
+	GPIO_PORTB_DEN_R = 0xFF;    // To Make LCD DATA port B digital  
+    
+    delayMs(20);			      // LCD Power ON delay always more than 15Ms
+	  LCD_Command(0x30);
+    delayMs(5);
+    LCD_Command(0x30);
+    delayUs(100);
+    
+  LCD_Command(0x30);
+	LCD_Command (0x38);		            // Initialization of 16X2 LCD in  8_bit mode 
+	LCD_Command (0x0C);		           // Display ON Cursor OFF 
+	LCD_Command (0x06);		          // Auto Increment cursor 
+  LCD_Command (0x01);		         // Clear display 
+	LCD_Command (0x80);		        // Cursor at home position 
+}
 /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::/
 /:                       Function prototypes                        :/
 /:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
