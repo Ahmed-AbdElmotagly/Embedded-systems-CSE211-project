@@ -50,23 +50,28 @@ void delayUs(int us){
 
 void LCD_Command(unsigned char cmnd)
 {
-    GPIO_PORTB_DATA_R   |= cmnd ;
-    GPIO_PORTA_DATA_R   &= ~(0x20) ;    //  A5--> RS=0 command register.
-    GPIO_PORTA_DATA_R   &= ~(0x40) ;    //  A6--> RW=0 Write operation.
-    GPIO_PORTA_DATA_R   |= (0x80) ;     // A7  --> Enable pulse 
-   
+    
+    GPIO_PORTA_DATA_R   = 0 ;    //  A5 , A6 ,A7 ----> RS=0 ,RW=0, EN=0 .
+	  GPIO_PORTB_DATA_R   = cmnd ;
+	  GPIO_PORTA_DATA_R   = 0x80 ;     // A7  --> Enable pulse
+    GPIO_PORTA_DATA_R   = 0 ;    
+    
     if(cmnd<4)
-    delayMs(4);
+    delayMs(2);
     else
     delayUs(40);
-//#######################################################################################################################################
+	
+}
+//##############################################################################################################################################
 void LCD_Data (unsigned char char_data)	    // LCD data for writting function 
 {
-	GPIO_PORTB_DATA_R |= char_data;
-	GPIO_PORTA_DATA_R   |=(0x20) ;        //  A5--> RS=1 command register.
-    GPIO_PORTA_DATA_R   &= ~(0x40) ;     //  A6--> RW=0 Write operation.
-    GPIO_PORTA_DATA_R   |= (0x80) ;     // A7  --> Enable pulse 
-	delayUs(40);
+	
+	  GPIO_PORTA_DATA_R   =0x20 ;        //  A5--> RS=1 command register.
+	  GPIO_PORTB_DATA_R = char_data;
+    GPIO_PORTA_DATA_R = (0x80 | 0x20) ;      // Pulse E
+	  delayUs(0);
+	  GPIO_PORTA_DATA_R = 0;
+	  delayUs(40);
 }
 //############################################################################################################################################
 void LCD_Initalization (void)				// LCD Initialize function 
