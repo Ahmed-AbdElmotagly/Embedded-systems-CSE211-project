@@ -5,6 +5,7 @@
 
 #define RED_LED 0x02
 #define BLUE_LED 0x04
+#define GREEN_LED 0x08
 #define pi 3.14159265358979323846
 #define R 6371000 // raduis of Earth
 
@@ -12,23 +13,21 @@ void SystemInit(){};
 
 void port_Init(void)
 {							  // this function is to activate the ports which will be used inshaa allah
-	SYSCTL_RCGCGPIO_R = 0x37; // to activate port F , E,C,B,A
-	while ((SYSCTL_PRGPIO_R & 0x37) == 0)
-	{
-	}								// waiting for the activation
+	SYSCTL_RCGCGPIO_R = 0x37; // to activate ports  F,E,C,B,A
+	while ((SYSCTL_PRGPIO_R & 0x37) == 0)	{}								// waiting for the activation
 	GPIO_PORTF_LOCK_R = 0x4C4F434B; // UNLOCKING PORT F
 }
 // ##################################################################################################################################
 void LED_Init(char data)
-{									 // this function is to turn on Led using char for 8 bits
+{						 // this function is to turn on Led using char for 8 bits
 	GPIO_PORTF_DATA_R |= data;		 // on
 	GPIO_PORTF_PUR_R |= data;		 // use pull up resistance
 	GPIO_PORTF_CR_R |= data;		 // unlock pin F1 (the red led )
 	GPIO_PORTF_DIR_R |= data;		 // pin F1 as output
 	GPIO_PORTF_DEN_R |= data;		 // to enable digital
-	GPIO_PORTF_AFSEL_R &= ~(data);	 // disable Alternate function select
-	GPIO_PORTF_AMSEL_R &= ~(data);	 // disable Analog
-	GPIO_PORTF_PCTL_R &= 0x00000000; // disable special functions
+	GPIO_PORTF_AFSEL_R &= ~(data);		 // disable Alternate function select
+	GPIO_PORTF_AMSEL_R &= ~(data);		 // disable Analog
+	GPIO_PORTF_PCTL_R &= 0x00000000;	 // disable special functions
 }
 // ####################################################################################################################################
 // port A ===> (A5 , A6 , A7) for controll
