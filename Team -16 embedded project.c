@@ -164,14 +164,14 @@ double distance(double lat1, double longt1, double lat2, double longt2)
 	else
 	{
 
-		// from formoula sheet "HaverSine" to calculate the distance
-		// declare some of parameters
-		angleOfLat = (lat2 - lat1) / 2;
-		angleOfLongt = (longt2 - longt1) / 2;
+	// from formoula sheet "HaverSine" to calculate the distance
+	// declare some of parameters
+	angleOfLat = (lat2 - lat1) / 2;
+	angleOfLongt = (longt2 - longt1) / 2;
 
-		dist = (2 * R * asin(sqrt((sin(deg_to_rad(angleOfLat)) * sin(deg_to_rad(angleOfLat))) + (cos(deg_to_rad(longt1)) * cos(deg_to_rad(longt2)) * sin(deg_to_rad(angleOfLongt)) * sin(deg_to_rad(angleOfLongt))))));
+	dist = (2 * R * asin(sqrt((sin(deg_to_rad(angleOfLat)) * sin(deg_to_rad(angleOfLat))) + (cos(deg_to_rad(longt1)) * cos(deg_to_rad(longt2)) * sin(deg_to_rad(angleOfLongt)) * sin(deg_to_rad(angleOfLongt))))));
 
-		return dist;
+	return dist;
 	}
 }
 
