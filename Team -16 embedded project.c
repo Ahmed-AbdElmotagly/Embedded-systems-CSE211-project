@@ -80,18 +80,6 @@ void LCD_Data_ch(unsigned char char_data) // LCD data for writting function
 }
 //############################################################################################################################################
 
-void LCD_Data_num(float number) // LCD Data-number for writting function
-{
-
-	GPIO_PORTA_DATA_R = 0x20; //  A5--> RS=1 command register.
-	GPIO_PORTB_DATA_R = number;
-	GPIO_PORTA_DATA_R = (0x80 | 0x20); // Pulse E
-	delayUs(0);
-	GPIO_PORTA_DATA_R = 0;
-	delayUs(40);
-}
-//############################################################################################################################################
-
 void LCD_Initalization(void) // LCD Initialize function
 {
 	SYSCTL_RCGCGPIO_R |= 0x03; // to activate port A & B
@@ -122,7 +110,7 @@ void LCD_String(char *str) // Send string to LCD function
 	int i;
 	for (i = 0; str[i] != 0; i++) // Send each char of string till the NULL
 	{
-		LCD_Data(str[i]);
+		LCD_Data_ch(str[i]);
 	}
 }
 
@@ -181,8 +169,10 @@ int main()
 	// Example for testing function
 
 	double lat1 = 30.0003, lat2 = 29.999, longt1 = 31.1768, longt2 = 31.1736;
-	double dist = distance(lat1, longt1, lat2, longt2);
-
+	double dist = distance(lat1, longt1, lat2, longt2); 
+	
+	int x =200;  // for testing to print integer number only in LCD
+	
 	printf("the distance %f", dist); //test the distance
 	if (dist > 100)
 	{
@@ -193,7 +183,7 @@ int main()
 		delayMs(500);
 		LCD_String("If distance>100 m "); //write string on 1st line of LCD
 		LCD_Command(0xC0);				  // Go to 2nd line
-		LCD_Data_num();					  // Write distance as "float number" on 2nd line
+		LCD_String(x+'0');	// for testing to print integer number only in LCD				
 		delayMs(500);
 	}
 	return 0;
