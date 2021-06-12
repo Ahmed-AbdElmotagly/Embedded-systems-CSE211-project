@@ -162,7 +162,15 @@ double distance(double lat1, double longt1, double lat2, double longt2)
 	return dist;
 	}
 }
-
+//#################################################################################################################
+void uart_Init(void)
+{ SYSCTL_RCGCUART_R = 0x01; 		// enable uart0
+	delayUs(1);
+	GPIO_PORTA_DEN_R |= 0x03;			// A0 & A1 as digital 
+	GPIO_PORTA_AFSEL_R &= ~(0x03);
+	GPIO_PORTA_AMSEL_R &= ~(0x03);
+	
+}
 int main()
 {
 
