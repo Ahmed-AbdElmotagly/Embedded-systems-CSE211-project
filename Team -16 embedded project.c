@@ -2,6 +2,7 @@
 #include <tm4c123gh6pm.h>
 #include <stdlib.h>
 #include <math.h>
+#include <string.h>
 
 #define RED_LED 0x02
 #define BLUE_LED 0x04
@@ -186,10 +187,68 @@ char data;
 	return (unsigned char)data;
 }
 //#######################################################################################################################	
+char strng[300];
+
+int strng_counter=0;
+
+char Gps_Message[500]
+//="$GPRMC,235316.000,A,4003.9040,N,10512.5792,W,0.09,144.75,141112,,*19 $GPGGA,235317.000,4003.9039,N,10512.5793,W,1,08,1.6,1577.9,M,-20.7,M,,0000*5F $GPGSA,A,3,22,18,21,06,03,09,24,15,,,,,2.5,1.6,1.9*3E";
+//for testing the splitting
+
+int i ;
+
+int finish =0; 
+
+int position_counter=0;
+
+void Receive_GPS_Data()   
+{ 
+for(int i=0; i<500; i++)    //store the message in an array of charactars
+	
+        Gps_Message[i] = uart_reciever();
+	
+    while(finish==0)
+{
+for(int i=0;i<500;i++)
+{
+//try to find GPGGA message that i need  to get latitude and longitude 
+
+if( Gps_Message[i]=='$' ){ 
+
+if( Gps_Message[i+1]=='G' ) {
+
+if( Gps_Message[i+2]=='P' ) {
+
+if( Gps_Message[i+3]=='G' ){
+
+if( Gps_Message[i+4]=='G' ) {
+
+if( Gps_Message[i+5]=='A' ) {
+
+if( Gps_Message[i+6]==',') 
+{
+    
+    for(int j=i;j<300;j++)
+    {
+        strng[strng_counter++] = Gps_Message[j];
+    }
 }
+}
+}
+}
+}
+}
+}
+}
+ finish =1;
+}
+}
+
+
+
 int main()
 {
-
+Receive_GPS_Data() ;
 	// Example for testing function
 
 	double lat1 = 30.0003, lat2 = 29.999, longt1 = 31.1768, longt2 = 31.1736;
