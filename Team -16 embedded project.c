@@ -164,12 +164,26 @@ double distance(double lat1, double longt1, double lat2, double longt2)
 }
 //#################################################################################################################
 void uart_Init(void)
-{ SYSCTL_RCGCUART_R = 0x01; 		// enable uart0
+{ SYSCTL_RCGCUART_R = 0x01; 				// enable uart0
 	delayUs(1);
-	GPIO_PORTA_DEN_R |= 0x03;			// A0 & A1 as digital 
-	GPIO_PORTA_AFSEL_R &= ~(0x03);
-	GPIO_PORTA_AMSEL_R &= ~(0x03);
-	
+	UART0_CTL_R  = 0x0;								// disable uart
+	UART0_IBRD_R = 104;								// integer baud rate
+	UART0_FBRD_R = 11;								// fraction baud rate
+	UART0_LCRH_R = 0x60; 							// 8 bits data 
+	UART0_CTL_R  = 0x301; 						// enable uart , enable tx ,rx
+	GPIO_PORTA_DEN_R |= 0x03;					// A0 & A1 as digital 
+	GPIO_PORTA_AFSEL_R  =  (0x03);		// enable alternate function
+	GPIO_PORTA_AMSEL_R &= ~(0x03);		// disable analog
+	GPIO_PORTA_PCTL_R   =  (0x03);		// A0 --> Rx  A1-->Tx
+	delayUs(1);
+	}
+char  uart_reciever (void){
+char data;
+	while ((UART0_FR_R & (1<<4))!= 0);
+	data = UART0_DR_R;
+	return (unsigned char)data;
+}
+//#######################################################################################################################	
 }
 int main()
 {
