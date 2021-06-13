@@ -166,24 +166,25 @@ double distance(double lat1, double longt1, double lat2, double longt2)
 //#################################################################################################################
 void uart_Init(void)
 {	SYSCTL_RCGCGPIO_R |= 0x08;				 // to activate ports  D
-	SYSCTL_RCGCUART_R = 0x08; 					// enable uart2 ,, D4 --> rx ,, D5 -->tx
-	GPIO_PORTE_CR_R |= 0x30;		 			// unlock pins D4 , D5 
+	SYSCTL_RCGCUART_R  = 0xC0; 					// enable uart2 ,, D6 --> rx ,, D7 -->tx
+	GPIO_PORTD_CR_R  |=  0xC0;		 			// unlock pins D6 , D7 
+	GPIO_PORTD_DEN_R |= 0xC0;					// D6 & D7 as digital 
+	GPIO_PORTD_AFSEL_R  =  (0xC0);		// enable alternate function
+	GPIO_PORTD_AMSEL_R &= ~(0xC0);		// disable analog
+	GPIO_PORTD_PCTL_R   =  (GPIO_PORTD_PCTL_R&0x00FFFFFF)+0x11000000;		// D6 --> Rx  D7-->Tx
 	UART2_CTL_R  = 0x0;								// disable uart
 	UART2_IBRD_R = 104;								// integer baud rate
 	UART2_FBRD_R = 11;								// fraction baud rate
 	UART2_LCRH_R = 0x70; 							// 8 bits data 
 	UART2_CTL_R  = 0x301; 						// enable uart , enable tx ,rx
-	GPIO_PORTE_DEN_R |= 0x30;					// D4 & D5 as digital 
-	GPIO_PORTA_AFSEL_R  =  (0x30);		// enable alternate function
-	GPIO_PORTA_AMSEL_R &= ~(0x30);		// disable analog
-	GPIO_PORTA_PCTL_R   =  (0x30);		// D4 --> Rx  D5-->Tx
-	delayUs(1);
+	
+	
 	}
 char  uart_reciever(void){
 char data;
 	while ((UART2_FR_R & (1<<4))!= 0)
-	//data = UART2_DR_R&0xff ;
-    data = UART2_DR_R;
+	data = UART2_DR_R&0xff ;
+  //  data = UART2_DR_R;
 	return (unsigned char)data;
 }
 //#######################################################################################################################	
@@ -255,7 +256,7 @@ Receive_GPS_Data() ;
 	double dist = distance(lat1, longt1, lat2, longt2); 
 	
 	int x =200;  // for testing to print integer number only in LCD
-	
+	uart_Init();
 	printf("the distance %f", dist); //test the distance
 	if (dist > 100)
 	{
