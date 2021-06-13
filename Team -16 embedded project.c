@@ -221,18 +221,19 @@ LCD_Data_ch(' m');      // print unit
 // ##################################################################################################################################
 
 void uart_Init(void)
-{	SYSCTL_RCGCGPIO_R |= 0x08;				 // to activate ports  D
-	SYSCTL_RCGCUART_R  = 0xC0; 					// enable uart2 ,, D6 --> rx ,, D7 -->tx
-	GPIO_PORTD_CR_R  |=  0xC0;		 			// unlock pins D6 , D7 
-	GPIO_PORTD_DEN_R |= 0xC0;					// D6 & D7 as digital 
-	GPIO_PORTD_AFSEL_R  =  (0xC0);		// enable alternate function
-	GPIO_PORTD_AMSEL_R &= ~(0xC0);		// disable analog
-	GPIO_PORTD_PCTL_R   =  (GPIO_PORTD_PCTL_R&0x00FFFFFF)+0x11000000;		// D6 --> Rx  D7-->Tx
-	UART2_CTL_R  = 0x0;								// disable uart
-	UART2_IBRD_R = 104;								// integer baud rate
-	UART2_FBRD_R = 11;								// fraction baud rate
-	UART2_LCRH_R = 0x70; 							// 8 bits data 
-	UART2_CTL_R  = 0x301; 						// enable uart , enable tx ,rx
+{	SYSCTL_RCGCGPIO_R |= 0x10;				 // to activate ports  E
+	SYSCTL_RCGCUART_R | = 0x20; 					// enable uart5 , E --> rx ,, E -->tx
+	GPIO_PORTE_CR_R  |=  0x20;		 			// unlock pins  ,  
+	GPIO_PORTE_DEN_R |= 0x20;					//  as digital 
+	GPIO_PORTE_AFSEL_R  =  (0x20);		// enable alternate function
+	GPIO_PORTE_AMSEL_R &= ~(0x20);		// disable analog
+	while((SYSCTL_PRUART_R & 0x0020)==0){};
+	UART5_CTL_R &= ~0x0001;
+	UART5_IBRD_R = 104;
+	UART5_FBRD_R = 11; 
+	UART5_LCRH_R = 0x0070;
+	UART5_CTL_R = 0x0301;
+	
 	
 	
 	}
