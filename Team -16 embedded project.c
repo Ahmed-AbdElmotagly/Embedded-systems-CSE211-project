@@ -70,9 +70,9 @@ void delayUs(int us)
 void LCD_Command(unsigned char cmnd)
 {
 
-	GPIO_PORTA_DATA_R = 0; //  A5 , A6 ,A7 ----> RS=0 ,RW=0, EN=0 .
+	GPIO_PORTA_DATA_R = 0; //  E1 , E2 ,E3 ----> RS=0 ,RW=0, EN=0 .
 	GPIO_PORTB_DATA_R = cmnd;
-	GPIO_PORTA_DATA_R = 0x80; // A7  --> Enable pulse
+	GPIO_PORTA_DATA_R = 0x80; // E3  --> Enable pulse
 	GPIO_PORTA_DATA_R = 0;
 
 	if (cmnd < 4)
@@ -222,7 +222,7 @@ LCD_Data_ch(' m');      // print unit
 
 void uart_Init(void)
 {	SYSCTL_RCGCGPIO_R |= 0x10;				 // to activate ports  E
-	SYSCTL_RCGCUART_R | = 0x20; 					// enable uart5 , E --> rx ,, E -->tx
+	SYSCTL_RCGCUART_R | = 0x20; 					// enable uart5 , E4 --> rx ,, E5 -->tx
 	GPIO_PORTE_CR_R  |=  0x20;		 			// unlock pins  ,  
 	GPIO_PORTE_DEN_R |= 0x20;					//  as digital 
 	GPIO_PORTE_AFSEL_R  =  (0x20);		// enable alternate function
