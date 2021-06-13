@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
+#include <tm4c123.h>
 
 #define RED_LED 0x02
 #define BLUE_LED 0x04
@@ -259,7 +260,8 @@ int data_length ;
 
 void Receive_GPS_Data()   
 { 
-	for(int i=0; i<500; i++)    //store the message in an array
+	int i;
+	for( i=0; i<500; i++)    //store the message in an array
 	
         Gps_Message[i] = uart_reciever();
 	
@@ -283,8 +285,8 @@ if( Gps_Message[i+5]=='A' ) {
 
 if( Gps_Message[i+6]==',') 
 {
-    
-    for(int j=i;j<300;j++)
+    int j;
+    for( j=i;j<300;j++)
     {
         
         strng[strng_counter++] = Gps_Message[j];
