@@ -239,9 +239,9 @@ void uart_Init(void)
 	}
 char  uart_reciever(void){
 char data;
-	while ((UART2_FR_R & (1<<4))!= 0)
-	data = UART2_DR_R&0xff ;
-  //  data = UART2_DR_R;
+	while ((UART5_FR_R & (1<<4))!= 0)
+	data = UART5_DR_R&0xff ;
+  //  data = UART5_DR_R;
 	return (unsigned char)data;
 }
 //#######################################################################################################################	
