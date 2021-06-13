@@ -45,6 +45,8 @@ void delayMs(int ms)
 		{
 		} // delay for 1 Ms
 }
+// ##################################################################################################################################
+
 void delayUs(int us)
 {
 
@@ -54,6 +56,8 @@ void delayUs(int us)
 		{
 		}
 }
+// ##################################################################################################################################
+
 
 void LCD_Command(unsigned char cmnd)
 {
@@ -106,6 +110,8 @@ void LCD_Initalization(void) // LCD Initialize function
 	LCD_Command(0x01); // Clear display
 	LCD_Command(0x80); // Cursor at home position
 }
+// ##################################################################################################################################
+
 void LCD_String(char *str) // Send string to LCD function
 {
 	int i;
@@ -114,6 +120,8 @@ void LCD_String(char *str) // Send string to LCD function
 		LCD_Data_ch(str[i]);
 	}
 }
+// ##################################################################################################################################
+
 
 void LCD_String_xy(char row, char pos, char *str) // Send string to LCD with xy position
 {
@@ -123,12 +131,16 @@ void LCD_String_xy(char row, char pos, char *str) // Send string to LCD with xy 
 		LCD_Command((pos & 0x0F) | 0xC0); // Command of second row and required position<16
 	LCD_String(str);					  // Call LCD string function
 }
+// ##################################################################################################################################
+
 
 void LCD_Clear()
 {
 	LCD_Command(0x01); // clear display
 	LCD_Command(0x80); // return cursor at home position
 }
+// ##################################################################################################################################
+
 /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::/
 /:                       Function prototypes                        :/
 /:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
@@ -141,9 +153,9 @@ double rad_to_deg(double rad)
 	return rad * (180 / pi);
 }
 
-double distance(double lat1, double longt1, double lat2, double longt2)
+float distance(float lat1, float longt1, float lat2, float longt2)
 {
-	double dist, angleOfLat, angleOfLongt;
+	float dist, angleOfLat, angleOfLongt;
 	if ((lat1 == lat2) && (longt1 == longt2))
 	{
 		return 0;
@@ -163,7 +175,43 @@ double distance(double lat1, double longt1, double lat2, double longt2)
 	return dist;
 	}
 }
-//#################################################################################################################
+// ##################################################################################################################################
+
+float get_langitude(float lang){
+// if lang dddmm.tttt
+// from this formula ===>  ddd + mm.tttt to get actuall langitude
+float x = (lang/100);
+int y = (int)x;
+return    y +(((x-y)*100)/60);
+}
+
+// ##################################################################################################################################
+
+float get_latitude(float lat){
+// if lang ddmm.tttt
+// from this formula ===>  dd + mm.tttt to get actuall latitude
+float x = (lat/100);
+int y = (int)x;
+return    y +(((x-y)*100)/60);
+}
+
+// ##################################################################################################################################
+
+void num_To_Ch(int x){
+int a,b,c;
+a = x % 10; // to get el A7ad
+x/= 10;  // now x====> 34rat & me2at
+b = x % 10; // to get el 34rat
+x/= 10;  // now x====> me2at
+c = x;   // to get el me2at
+// now we will convert a,b,c from integer to char by adding '0' ===> (Type casting) 
+LCD_Data_ch((c+'0'));  // print me2at num
+LCD_Data_ch((b+'0'));  // print 34rat num
+LCD_Data_ch((a+'0'));  // print A7ad num
+LCD_Data_ch(' m');      // print unit
+}
+// ##################################################################################################################################
+
 void uart_Init(void)
 {	SYSCTL_RCGCGPIO_R |= 0x08;				 // to activate ports  D
 	SYSCTL_RCGCUART_R  = 0xC0; 					// enable uart2 ,, D6 --> rx ,, D7 -->tx
@@ -245,30 +293,45 @@ if( Gps_Message[i+6]==',')
 }
 }
 
-
+// ##################################################################################################################################
+float old_lat=0 , old_lang=0 , now_lat=0 , now_lang=0;
+float dist=0, Total_dist=0;
 
 int main()
 {
-Receive_GPS_Data() ;
-	// Example for testing function
-
-	double lat1 = 30.0003, lat2 = 29.999, longt1 = 31.1768, longt2 = 31.1736;
-	double dist = distance(lat1, longt1, lat2, longt2); 
 	
 	int x =200;  // for testing to print integer number only in LCD
+        
+	
+	Receive_GPS_Data() ;
 	uart_Init();
-	printf("the distance %f", dist); //test the distance
-	if (dist > 100)
-	{
-		port_Init();
-		LED_Init(RED_LED);
-		LCD_Initalization(); // Initialize LCD
-		LCD_Clear();
-		delayMs(500);
-		LCD_String("If distance>100 m "); //write string on 1st line of LCD
-		LCD_Command(0xC0);				  // Go to 2nd line
-		LCD_String(x+'0');	// for testing to print integer number only in LCD				
-		delayMs(500);
-	}
+	port_Init();
+	
+	while(Total_dist<=100){   // if you want to make another condition 
+	// make swith to close the loop if you don't need 100m
+
+	old_lat  = now_lat;
+	old_lang = now_lang;
+
+	now_lat  = get_latitude();  
+	now_lang = get_langitude();
+
+
+	if(!(old_lat==0 && old_lang==0)){  
+	dist = distance(old_lat,old_lang,now_lat,now_lang);
+	Total_dist+=dist;
+	};
+
+        };
+	
+	LED_Init(RED_LED); // Turn on RED_LED ====> Distance>=100m
+	LCD_Initalization(); // Initialize LCD
+	LCD_Clear();
+	delayMs(500);
+	LCD_String("If distance>100 m "); //write string on 1st line of LCD
+	LCD_Command(0xC0);				  // Go to 2nd line
+	num_To_Ch(x);   // print distance in 2nd line of LCD		
+	delayMs(500);
+	
 	return 0;
 }
