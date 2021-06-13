@@ -247,7 +247,7 @@ char data;
 //intilization for variables
 char strng[50];
 int strng_counter=0;
-char Gps_Message[500]
+char Gps_Message[500];
 int i ;
 int finish =0; 
 int position_counter=0;
