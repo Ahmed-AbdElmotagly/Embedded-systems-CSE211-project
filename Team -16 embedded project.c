@@ -252,20 +252,22 @@ char Gps_Message[500];
 int i ;
 int finish =0; 
 int position_counter=0;
+char *data[25];
 
-void Receive_GPS_Data() 
+
+int data_length ;
+
+void Receive_GPS_Data()   
 { 
-	int i = 0;
-	for (i=0; i<500; i++)
+	for(int i=0; i<500; i++)    //store the message in an array
 	
         Gps_Message[i] = uart_reciever();
-			 
+	
     while(finish==0)
 {
-	int r=0;
-for( r=0;r<500;r++)
+for(int i=0;i<500;i++)
 {
-//try to find GPGGA message that i need 
+//try to find GPGGA message that i need  to get latitude and longitude 
 
 if( Gps_Message[i]=='$' ){ 
 
@@ -281,8 +283,8 @@ if( Gps_Message[i+5]=='A' ) {
 
 if( Gps_Message[i+6]==',') 
 {
-    int j;
-    for( j=i;j<300;j++)
+    
+    for(int j=i;j<300;j++)
     {
         
         strng[strng_counter++] = Gps_Message[j];
@@ -297,19 +299,21 @@ if( Gps_Message[i+6]==',')
 }
 }
 }
-y = strtok(strng,",");
-y = strtok(NULL,",");
-n = strtok(NULL,",");
-x = strtok(NULL,",");
-e = strtok(NULL,",");
-fix = strtok(NULL,",");
-if (fix[0]=='1')
+
+ finish =1;
+
+    
+}
+}
+
+void split_GPGGA()
 {
-	 finish =1;
-}
-}
-lat = strtod(y,NULL);
-lang = strtod(x,NULL);
+    data_length=0;
+    data[0] = strtok (strng ,",");
+    while (data[data_length]!= NULL && data_length <14){
+        data_length++ ;
+        data[data_length] = strtok(NULL,",");
+    }
 }
 
 
