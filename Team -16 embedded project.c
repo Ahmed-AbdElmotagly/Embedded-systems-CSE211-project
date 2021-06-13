@@ -10,6 +10,14 @@
 #define pi 3.14159265358979323846
 #define R 6371000 // raduis of Earth
 
+double lat;
+double lang;
+unsigned char* y;
+unsigned char* x;
+unsigned char* n;
+unsigned char* e;
+unsigned char* fix;
+
 void SystemInit(){};
 
 void port_Init(void)
@@ -236,31 +244,27 @@ char data;
 	return (unsigned char)data;
 }
 //#######################################################################################################################	
-char strng[300];
-
+//intilization for variables
+char strng[50];
 int strng_counter=0;
-
 char Gps_Message[500]
-//="$GPRMC,235316.000,A,4003.9040,N,10512.5792,W,0.09,144.75,141112,,*19 $GPGGA,235317.000,4003.9039,N,10512.5793,W,1,08,1.6,1577.9,M,-20.7,M,,0000*5F $GPGSA,A,3,22,18,21,06,03,09,24,15,,,,,2.5,1.6,1.9*3E";
-//for testing the splitting
-
 int i ;
-
 int finish =0; 
-
 int position_counter=0;
 
-void Receive_GPS_Data()   
+void Receive_GPS_Data() 
 { 
-for(int i=0; i<500; i++)    //store the message in an array of charactars
+	int i = 0;
+	for (i=0; i<500; i++)
 	
         Gps_Message[i] = uart_reciever();
-	
+			 
     while(finish==0)
 {
-for(int i=0;i<500;i++)
+	int r=0;
+for( r=0;r<500;r++)
 {
-//try to find GPGGA message that i need  to get latitude and longitude 
+//try to find GPGGA message that i need 
 
 if( Gps_Message[i]=='$' ){ 
 
@@ -268,7 +272,7 @@ if( Gps_Message[i+1]=='G' ) {
 
 if( Gps_Message[i+2]=='P' ) {
 
-if( Gps_Message[i+3]=='G' ){
+ if( Gps_Message[i+3]=='G' ){
 
 if( Gps_Message[i+4]=='G' ) {
 
@@ -276,10 +280,13 @@ if( Gps_Message[i+5]=='A' ) {
 
 if( Gps_Message[i+6]==',') 
 {
-    
-    for(int j=i;j<300;j++)
+    int j;
+    for( j=i;j<300;j++)
     {
+        
         strng[strng_counter++] = Gps_Message[j];
+   
+        
     }
 }
 }
@@ -289,9 +296,21 @@ if( Gps_Message[i+6]==',')
 }
 }
 }
- finish =1;
+y = strtok(strng,",");
+y = strtok(NULL,",");
+n = strtok(NULL,",");
+x = strtok(NULL,",");
+e = strtok(NULL,",");
+fix = strtok(NULL,",");
+if (fix[0]=='1')
+{
+	 finish =1;
 }
 }
+lat = strtod(y,NULL);
+lang = strtod(x,NULL);
+}
+
 
 // ##################################################################################################################################
 float old_lat=0 , old_lang=0 , now_lat=0 , now_lang=0;
