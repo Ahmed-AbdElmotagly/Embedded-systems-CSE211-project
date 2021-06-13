@@ -221,11 +221,11 @@ LCD_Data_ch(' m');      // print unit
 // ##################################################################################################################################
 
 void uart_Init(void)
-{	SYSCTL_RCGCGPIO_R |= 0x10;				 // to activate ports  E
-	GPIO_PORTE_CR_R  |=  0x20;		 			// unlock pins  ,  
-	GPIO_PORTE_DEN_R |= 0x20;					//  as digital 
-	GPIO_PORTE_AFSEL_R  =  (0x20);		// enable alternate function
-	GPIO_PORTE_AMSEL_R &= ~(0x20);		// disable analog
+{	//SYSCTL_RCGCGPIO_R |= 0x10;				 // to activate ports  E
+	//GPIO_PORTE_CR_R  |=  0x20;		 			// unlock pins  ,  
+	//GPIO_PORTE_DEN_R |= 0x20;					//  as digital 
+	//GPIO_PORTE_AFSEL_R  =  (0x20);		// enable alternate function
+	//GPIO_PORTE_AMSEL_R &= ~(0x20);		// disable analog
  	SYSCTL_RCGCUART_R | = 0x20; 					// enable uart5 , E4 --> rx ,, E5 -->tx
 	while((SYSCTL_PRUART_R & 0x0020)==0){};
 	UART5_CTL_R &= ~0x0001;
