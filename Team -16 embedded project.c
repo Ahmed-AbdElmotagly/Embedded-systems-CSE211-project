@@ -10,13 +10,6 @@
 #define pi 3.14159265358979323846
 #define R 6371000 // raduis of Earth
 
-double lat;
-double lang;
-unsigned char* y;
-unsigned char* x;
-unsigned char* n;
-unsigned char* e;
-unsigned char* fix;
 
 void SystemInit(){};
 
@@ -220,13 +213,19 @@ LCD_Data_ch(' m');      // print unit
 }
 // ##################################################################################################################################
 
-void uart_Init(void)
-{	//SYSCTL_RCGCGPIO_R |= 0x10;				 // to activate ports  E
-	//GPIO_PORTE_CR_R  |=  0x20;		 			// unlock pins  ,  
-	//GPIO_PORTE_DEN_R |= 0x20;					//  as digital 
-	//GPIO_PORTE_AFSEL_R  =  (0x20);		// enable alternate function
-	//GPIO_PORTE_AMSEL_R &= ~(0x20);		// disable analog
- 	SYSCTL_RCGCUART_R | = 0x20; 					// enable uart5 , E4 --> rx ,, E5 -->tx
+void uart_Init(void){
+SYSCTL_RCGCGPIO_R |= 0x00000010;
+  while ((SYSCTL_PRGPIO_R&0x10) == 0){};
+	GPIO_PORTE_LOCK_R = 0x4C4F434B;
+	GPIO_PORTE_CR_R |= 0x3E;
+	GPIO_PORTE_DIR_R = 0x0E;
+	GPIO_PORTE_DEN_R = 0x3E;
+	GPIO_PORTE_AMSEL_R = 0x00;
+	GPIO_PORTE_AFSEL_R = 0x30;
+	GPIO_PORTE_PCTL_R = 0x00110000;
+  GPIO_PORTE_PUR_R = 0x00;
+
+ 	SYSCTL_RCGCUART_R |= 0x0020; 					// enable uart5 , E4 --> rx ,, E5 -->tx
 	while((SYSCTL_PRUART_R & 0x0020)==0){};
 	UART5_CTL_R &= ~0x0001;
 	UART5_IBRD_R = 104;
@@ -237,13 +236,14 @@ void uart_Init(void)
 	
 	
 	}
-char  uart_reciever(void){
-char data;
-	while ((UART5_FR_R & (1<<4))!= 0)
-	data = UART5_DR_R&0xff ;
-  //  data = UART5_DR_R;
-	return (unsigned char)data;
+
+unsigned char  uart_reciever(void)
+	{
+	while((UART5_FR_R & 0x10)!=0);
+	return ((unsigned char)(UART5_DR_R & 0xFF));
 }
+
+
 //#######################################################################################################################	
 //intilization for variables
 char strng[50];
@@ -316,25 +316,40 @@ lang = strtod(x,NULL);
 // ##################################################################################################################################
 float old_lat=0 , old_lang=0 , now_lat=0 , now_lang=0;
 float dist=0, Total_dist=0;
-
+float LAT;
+ float LONG;
 int main()
 {
 	
-	int x =200;  // for testing to print integer number only in LCD
-        
+	SCB->CPACR|=((3UL<<10*2)|(3UL<<11*2));
+
+		port_Init();
+
+		uart_Init();
+		Receive_GPS_Data() ;
+		split_GPGGA();
+		LAT = atof(data[2]);
+		LONG = atof(data[4]);
+		
+
+
 	
-	Receive_GPS_Data() ;
-	uart_Init();
-	port_Init();
 	
-	while(Total_dist<=100){   // if you want to make another condition 
+  LCD_Initalization(); // Initialize LCD
+	LCD_Clear();
+	LCD_String("Distance = ");
+	delayMs(500);
+		
+	
+	while(Total_dist<=100){   
+		// if you want to make another condition 
 	// make swith to close the loop if you don't need 100m
 
 	old_lat  = now_lat;
 	old_lang = now_lang;
 
-	now_lat  = get_latitude();  
-	now_lang = get_langitude();
+	now_lat  = get_latitude(LAT);  
+	now_lang = get_langitude(LONG);
 
 
 	if(!(old_lat==0 && old_lang==0)){  
@@ -342,16 +357,17 @@ int main()
 	Total_dist+=dist;
 	};
 
-        };
-	
-	LED_Init(RED_LED); // Turn on RED_LED ====> Distance>=100m
-	LCD_Initalization(); // Initialize LCD
-	LCD_Clear();
-	delayMs(500);
-	LCD_String("If distance>100 m "); //write string on 1st line of LCD
+while(1)
+    {
 	LCD_Command(0xC0);				  // Go to 2nd line
-	num_To_Ch(x);   // print distance in 2nd line of LCD		
+	num_To_Ch(Total_dist);   // print distance in 2nd line of LCD		
 	delayMs(500);
-	
+    }
+        };
+			LED_Init(RED_LED);  		//LED_Init(RED_LED)
+	LCD_Command(0xC0);				  // Go to 2nd line
+	num_To_Ch(Total_dist);   // print distance in 2nd line of LCD		
+	delayMs(500);
+    
 	return 0;
 }
