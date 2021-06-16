@@ -285,7 +285,7 @@ void Parsing(float array[])
 					counter = uart_reciever();
 				if(counter=='G'){
 					counter = uart_reciever();
-				if(countern=='A'){
+				if(counter=='A'){
 					counter = uart_reciever();
 				if(counter==','){
 					int i; 
