@@ -370,24 +370,24 @@ int main(void)
 
 	return 0;
 }
-/* // keypad code
-
+/* 
+// keypad code
 void keypad_init(void)
 {
-SYSCTL_RCGCGPIO_R |= 0x04; /* enable clock to GPIOC */
-SYSCTL_RCGCGPIO_R |= 0x10; /* enable clock to GPIOE */
+SYSCTL_RCGCGPIO_R |= 0x04; /* enable clock to GPIOC 
+SYSCTL_RCGCGPIO_R |= 0x10; /* enable clock to GPIOE 
  
-GPIO_PORTE_DIR_R |= 0x0F; /* set column pins 3-1 as output */
-GPIO_PORTE_DEN_R |= 0x0F; /* set column pins 3-1 as digital pins */
+GPIO_PORTE_DIR_R |= 0x0F; /* set column pins 3-1 as output 
+GPIO_PORTE_DEN_R |= 0x0F; /* set column pins 3-1 as digital pins 
 
  
-GPIO_PORTC_DIR_R &= ~0xF0; /* set row pin 7-4 as input */
-GPIO_PORTC_DEN_R |= 0xF0; /* set row pin 7-4 as digital pins */
-GPIO_PORTC_PUR_R |= 0xF0; /* enable pull-ups for pin 7-4 */
+GPIO_PORTC_DIR_R &= ~0xF0; /* set row pin 7-4 as input 
+GPIO_PORTC_DEN_R |= 0xF0; /* set row pin 7-4 as digital pins
+GPIO_PORTC_PUR_R |= 0xF0; /* enable pull-ups for pin 7-4 *
 }
  
-/* This is a non-blocking function to read the keypad. */
-/* If a key is pressed, it returns the key label in ASCII encoding. Otherwise, it returns a 0 (not ASCII 0). */
+/* This is a non-blocking function to read the keypad.
+/* If a key is pressed, it returns the key label in ASCII encoding. Otherwise, it returns a 0 (not ASCII 0). 
 unsigned char keypad_getkey(void)
 {
 const unsigned char keymap[4][3] = {
@@ -399,54 +399,54 @@ const unsigned char keymap[4][3] = {
  
 int row, col;
  
-/* check to see any key pressed first */
-GPIO_PORTE_DATA_R = 0; /* enable all coluns */
-row = GPIO_PORTC_DATA_R & 0xF0; /* read all rows */
-if (row == 0xF0) return 0; /* no key pressed */
- 
-/* If a key is pressed, it gets here to find out which key. */
-/* Although it is written as an infinite loop, it will take one of the breaks or return in one pass.*/
+/* check to see any key pressed first 
+GPIO_PORTE_DATA_R = 0; /* enable all coluns 
+row = GPIO_PORTC_DATA_R & 0xF0; /* read all rows 
+if (row == 0xF0) return 0; /* no key pressed 
+/* If a key is pressed, it gets here to find out which key. 
+/* Although it is written as an infinite loop, it will take one of the breaks or return in one pass.
 while (1)
 {
 col = 0;
-GPIO_PORTE_DATA_R = 0x0D; /* enable column 1 */
-delayUs(2); /* wait for signal to settle */
+GPIO_PORTE_DATA_R = 0x0D; /* enable column 1 
+delayUs(2); /* wait for signal to settle 
 row = GPIO_PORTC_DATA_R & 0xF0;
 if (row != 0xF0) break;
  
 col = 1;
-GPIO_PORTE_DATA_R = 0x0B; /* enable col 2 */
-delayUs(2); /* wait for signal to settle */
+GPIO_PORTE_DATA_R = 0x0B; /* enable col 2 
+delayUs(2); /* wait for signal to settle 
 row = GPIO_PORTC_DATA_R & 0xF0;
 if (row != 0xF0) break;
  
 col = 2;
-GPIO_PORTE_DATA_R = 0x07; /* enable col 3 */
-delayUs(2); /* wait for signal to settle */
+GPIO_PORTE_DATA_R = 0x07; /* enable col 3 
+delayUs(2); /* wait for signal to settle 
 row = GPIO_PORTC_DATA_R & 0xF0;
 if (row != 0xF0) break;
  
 
  
-return 0; /* if no key is pressed */
+return 0; /* if no key is pressed 
 }
  
-/* gets here when one of the rows has key pressed */
-if (row == 0xE0) return keymap[0][col]; /* key in row 0 */
-if (row == 0xD0) return keymap[1][col]; /* key in row 1 */
-if (row == 0xB0) return keymap[2][col]; /* key in row 2 */
-if (row == 0x70) return keymap[3][col]; /* key in row 3 */
-return 0; /* just to be safe */
+/* gets here when one of the rows has key pressed 
+if (row == 0xE0) return keymap[0][col]; /* key in row 0 
+if (row == 0xD0) return keymap[1][col]; /* key in row 1 
+if (row == 0xB0) return keymap[2][col]; /* key in row 2 
+if (row == 0x70) return keymap[3][col]; /* key in row 3 
+return 0; /* just to be safe 
 }
 unsigned char keypad_kbhit(void)
 {
 int col;
  
-/* check to see any key pressed */
-GPIO_PORTE_DATA_R = 0; /* enable all rows */
-col = GPIO_PORTC_DATA_R & 0xF0; /* read all columns */
+/* check to see any key pressed 
+GPIO_PORTE_DATA_R = 0; /* enable all rows 
+col = GPIO_PORTC_DATA_R & 0xF0; /* read all columns 
 if (col == 0xF0)
-return 0; /* no key pressed */
+return 0; /* no key pressed 
 else
-return 1; /* a key is pressed */
-}*/
+return 1; /* a key is pressed 
+}
+*/
