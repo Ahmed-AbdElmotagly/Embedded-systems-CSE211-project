@@ -15,7 +15,7 @@
 void SystemInit(){};
 
 void portF_Init(void)
-{							  // this function is to activate the ports which will be used inshaa allah   ====> will be removed
+{							  
 	SYSCTL_RCGCGPIO_R |= 0x20; // to activate ports  F
 	while ((SYSCTL_PRGPIO_R & 0x20) == 0)	{}								// waiting for the activation
 	GPIO_PORTF_LOCK_R = 0x4C4F434B; // UNLOCKING PORT F
@@ -25,14 +25,14 @@ void portF_Init(void)
 void LED_Init(char data)
 {						 // this function is to turn on Led using char for 8 bits
 		
-	GPIO_PORTF_PUR_R =0x00;		 // use pull up resistance ===> will be changed
+	GPIO_PORTF_PUR_R =0x00;		          // use pull up resistance
 	GPIO_PORTF_CR_R |= data;		 // unlock pin F1 (the red led )   
 	GPIO_PORTF_DIR_R |= data;		 // pin F1 as output 
 	GPIO_PORTF_DEN_R |= data;		 // to enable digital  
 	GPIO_PORTF_AFSEL_R &= ~(data);		 // disable Alternate function select   
 	GPIO_PORTF_AMSEL_R &= ~(data);		 // disable Analog  
 	GPIO_PORTF_PCTL_R = 0x00000000;	 // disable special functions
-	GPIO_PORTF_DATA_R = data;		 // on ====> will be changed & replaced last for logic
+	GPIO_PORTF_DATA_R = data;		 // on
 
 }
 // ####################################################################################################################################
@@ -81,7 +81,7 @@ void LCD_Command(unsigned char cmnd)
 void LCD_Data_ch(unsigned char char_data) // LCD data for writting function
 {
 
-	GPIO_PORTE_DATA_R = 0x02; //  A5--> RS=1 command register. E1
+	GPIO_PORTE_DATA_R = 0x02; // E1 --> RS=1 command register. 
 	GPIO_PORTB_DATA_R = char_data;
 	GPIO_PORTE_DATA_R = (0x08 | 0x02); // Pulse E
 	delayMs(1);
